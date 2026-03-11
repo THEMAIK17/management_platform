@@ -1,0 +1,102 @@
+## .NET / C# / ASP.NET Core
+
+# Build output
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Build results
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!**/packages/repositories.config
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Visual Studio
+.vs/
+.vscode/
+*.ncb
+*.sdf
+*.VC.db
+*.opensdf
+*.psess
+*.vsp
+*.vspx
+*.sap
+*.pidb
+*.orig
+*.aps
+
+# Rider / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# MSTest / VSTest
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+In.dd/
+
+# Benchmark results
+BenchmarkDotNet.Artifacts/
+
+# .NET publish / deploy
+[Pp]ublish/
+[Pp]ublished/
+PublishProfiles/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Entity Framework
+*.mdf
+*.ldf
+*.ndf
+Migrations/*.Designer.cs
+
+# SQLite databases (local dev)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# App settings with secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# User secrets
+.microsoft/usersecrets/
+
+# Docker
+.dockerignore
+
+# OS generated files
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Environment variables
+.env
+.env.local
+.env.*.local
