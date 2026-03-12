@@ -9,9 +9,8 @@ public class Project
     public string Description { get; private set; } = string.Empty;
     public ProjectStatus Status { get; private set; }
 
-    // Navigation property for EF Core
-    private readonly List<TaskItem> _tasks = new();
-    public IReadOnlyCollection<TaskItem> Tasks => _tasks.AsReadOnly();
+    // Navigation property — private set prevents reassignment from outside
+    public ICollection<TaskItem> Tasks { get; private set; } = new List<TaskItem>();
 
     // Required by EF Core
     private Project() { }
