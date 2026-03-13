@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Platform.Application.DTOs;
 using Platform.Application.Interfaces;
@@ -5,6 +6,7 @@ using Platform.Domain.Exceptions;
 
 namespace Platform.Web.Controllers;
 
+[Authorize]
 public class TaskController : Controller
 {
     private readonly ITaskService _taskService;

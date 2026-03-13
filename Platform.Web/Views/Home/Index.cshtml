@@ -1,8 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4">Plataforma de Gestión</h1>
+    <p class="lead">Bienvenido al sistema de gestión de proyectos y tareas.</p>
+    
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="mt-4">
+            <a asp-controller="Project" asp-action="Index" class="btn btn-primary btn-lg">Ir a mis Proyectos</a>
+        </div>
+    }
+    else
+    {
+        <div class="mt-4">
+            <p>Por favor, inicia sesión para gestionar tus proyectos.</p>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">Iniciar Sesión</a>
+        </div>
+    }
 </div>

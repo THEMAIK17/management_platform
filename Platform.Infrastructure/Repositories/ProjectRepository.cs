@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Platform.Domain.Entities;
+using Platform.Domain.Enums;
 using Platform.Domain.Interfaces;
 using Platform.Infrastructure.Data;
 
@@ -26,9 +27,9 @@ public class ProjectRepository : IProjectRepository
     {
         var query = _context.Projects.AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(statusFilter))
+        if (!string.IsNullOrWhiteSpace(statusFilter) && Enum.TryParse<ProjectStatus>(statusFilter, true, out var status))
         {
-            query = query.Where(p => p.Status.ToString() == statusFilter);
+            query = query.Where(p => p.Status == status);
         }
 
         // Count total before applying pagination, so the caller can compute page metadata.
