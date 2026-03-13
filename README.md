@@ -35,12 +35,18 @@ Management_Platform.sln
    CREATE DATABASE management_platform;
    ```
 
-2. Update the connection string in `appsettings.json` for both `Platform.Api` and `Platform.Web`:
-   ```json
-   "ConnectionStrings": {
-     "DefaultConnection": "Host=localhost;Port=5432;Database=management_platform;Username=YOUR_USER;Password=YOUR_PASSWORD"
-   }
+2. Configure the connection string using **.NET User Secrets** (recommended for security) for both `Platform.Api` and `Platform.Web`:
+
+   From the project root, run:
+   ```bash
+   # For the API project
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=management_platform;Username=YOUR_USER;Password=YOUR_PASSWORD" --project Platform.Api
+
+   # For the Web project
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=management_platform;Username=YOUR_USER;Password=YOUR_PASSWORD" --project Platform.Web
    ```
+
+   *Note: Using User Secrets prevents sensitive credentials from being committed to the repository.*
 
 ---
 
