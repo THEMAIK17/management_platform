@@ -38,13 +38,19 @@ public class TaskItem
         };
     }
 
-    public void Update(string title, Priority priority)
+    public void Update(string title, Priority priority, bool isCompleted)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainException("El título de la tarea es obligatorio.");
 
         Title = title.Trim();
         Priority = priority;
+        IsCompleted = isCompleted;
+    }
+
+    public void SetCompletionStatus(bool isCompleted)
+    {
+        IsCompleted = isCompleted;
     }
 
     public void MarkAsCompleted()
