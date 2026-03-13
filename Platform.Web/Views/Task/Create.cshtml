@@ -1,0 +1,36 @@
+@using Platform.Domain.Enums
+@model Platform.Application.DTOs.CreateTaskDto
+@{
+    ViewData["Title"] = "Nueva Tarea";
+    var projectId = ViewBag.ProjectId as Guid?;
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h1>Nueva Tarea</h1>
+
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="projectId" value="@projectId" />
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">@Html.ValidationSummary(true)</div>
+        }
+
+        <div class="mb-3">
+            <label class="form-label">Título *</label>
+            <input asp-for="Title" class="form-control" required maxlength="300" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Prioridad</label>
+            <select asp-for="Priority" class="form-select"
+                    asp-items="Html.GetEnumSelectList<Priority>()"></select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Orden *</label>
+            <input asp-for="Order" type="number" class="form-control" min="1" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Crear</button>
+        <a asp-controller="Project" asp-action="Tasks" asp-route-id="@projectId" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

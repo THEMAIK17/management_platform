@@ -1,0 +1,80 @@
+@model IEnumerable<Platform.Application.DTOs.TaskItemDto>
+@{
+    ViewData["Title"] = "Tareas";
+    var project = ViewBag.Project as Platform.Application.DTOs.ProjectDto;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>Tareas de: @project?.Name</h1>
+            <span class="badge bg-secondary">@project?.Status</span>
+        </div>
+        <div>
+            <a asp-controller="Task" asp-action="Create" asp-route-projectId="@project?.Id" class="btn btn-primary">+ Nueva Tarea</a>
+            <a asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+        </div>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Título</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.OrderBy(t => t.Order))
+            {
+                <tr class="@(task.IsCompleted ? "table-secondary" : "")">
+                    <td>@task.Order</td>
+                    <td>@task.Title</td>
+                    <td>
+                        <span class="badge @(task.Priority.ToString() == "High" ? "bg-danger" : task.Priority.ToString() == "Medium" ? "bg-warning text-dark" : "bg-info text-dark")">
+                            @task.Priority
+                        </span>
+                    </td>
+                    <td>@(task.IsCompleted ? "✅ Completada" : "⏳ Pendiente")</td>
+                    <td>
+                        <a asp-controller="Task" asp-action="Edit" asp-route-id="@task.Id" class="btn btn-sm btn-outline-secondary">Editar</a>
+
+                        @if (!task.IsCompleted)
+                        {
+                            <form asp-controller="Task" asp-action="Complete" asp-route-id="@task.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="projectId" value="@project?.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">Completar</button>
+                            </form>
+                        }
+
+                        <form asp-controller="Task" asp-action="Reorder" asp-route-id="@task.Id" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="projectId" value="@project?.Id" />
+                            <input type="number" name="newOrder" value="@task.Order" class="form-control d-inline-block" style="width: 70px;" min="1" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary">↕</button>
+                        </form>
+
+                        <form asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('¿Eliminar tarea?')">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="projectId" value="@project?.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
