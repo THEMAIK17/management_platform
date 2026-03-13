@@ -127,21 +127,21 @@ dotnet test Platform.Tests
 
 | Método | Ruta | Descripción | Auth |
 |---|---|---|---|
-| POST | `/api/auth/register` | Registrar usuario | ❌ |
-| POST | `/api/auth/login` | Iniciar sesión | ❌ |
-| GET | `/api/projects/search` | Listar proyectos (paginado) | ✅ |
-| GET | `/api/projects/summary` | Resumen global | ✅ |
-| POST | `/api/projects` | Crear proyecto | ✅ |
-| PUT | `/api/projects/{id}` | Actualizar proyecto | ✅ |
-| DELETE | `/api/projects/{id}` | Eliminar proyecto | ✅ |
-| PATCH | `/api/projects/{id}/activate` | Activar proyecto | ✅ |
-| PATCH | `/api/projects/{id}/complete` | Completar proyecto | ✅ |
-| GET | `/api/projects/{id}/tasks` | Listar tareas del proyecto | ✅ |
-| POST | `/api/tasks/{projectId}` | Crear tarea | ✅ |
-| PUT | `/api/tasks/{id}` | Actualizar tarea | ✅ |
-| DELETE | `/api/tasks/{id}` | Eliminar tarea | ✅ |
-| PATCH | `/api/tasks/{id}/complete` | Completar tarea | ✅ |
-| PATCH | `/api/tasks/{id}/reorder` | Reordenar tarea | ✅ |
+| POST | `/api/auth/register` | Registrar usuario | No |
+| POST | `/api/auth/login` | Iniciar sesión | No |
+| GET | `/api/projects/search` | Listar proyectos (paginado) | Sí |
+| GET | `/api/projects/summary` | Resumen global | Sí |
+| POST | `/api/projects` | Crear proyecto | Sí |
+| PUT | `/api/projects/{id}` | Actualizar proyecto | Sí |
+| DELETE | `/api/projects/{id}` | Eliminar proyecto | Sí |
+| PATCH | `/api/projects/{id}/activate` | Activar proyecto | Sí |
+| PATCH | `/api/projects/{id}/complete` | Completar proyecto | Sí |
+| GET | `/api/projects/{id}/tasks` | Listar tareas del proyecto | Sí |
+| POST | `/api/tasks/{projectId}` | Crear tarea | Sí |
+| PUT | `/api/tasks/{id}` | Actualizar tarea | Sí |
+| DELETE | `/api/tasks/{id}` | Eliminar tarea | Sí |
+| PATCH | `/api/tasks/{id}/complete` | Completar tarea | Sí |
+| PATCH | `/api/tasks/{id}/reorder` | Reordenar tarea | Sí |
 
 ---
 
