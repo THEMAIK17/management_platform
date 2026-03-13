@@ -1,0 +1,39 @@
+@using Platform.Domain.Enums
+@model Platform.Application.DTOs.UpdateTaskDto
+@{
+    ViewData["Title"] = "Editar Tarea";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h1>Editar Tarea</h1>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="projectId" value="@Context.Request.Query["projectId"]" />
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">@Html.ValidationSummary(true)</div>
+        }
+
+        <div class="mb-3">
+            <label class="form-label">Título *</label>
+            <input asp-for="Title" class="form-control" required maxlength="300" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Prioridad</label>
+            <select asp-for="Priority" class="form-select"
+                    asp-items="Html.GetEnumSelectList<Priority>()"></select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Orden *</label>
+            <input asp-for="Order" type="number" class="form-control" min="1" required />
+        </div>
+        <div class="mb-3 form-check">
+            <input asp-for="IsCompleted" type="checkbox" class="form-check-input" />
+            <label class="form-check-label">Tarea completada</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="javascript:history.back()" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

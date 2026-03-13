@@ -1,0 +1,28 @@
+@model Platform.Application.DTOs.UpdateProjectDto
+@{
+    ViewData["Title"] = "Editar Proyecto";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h1>Editar Proyecto</h1>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @Html.ValidationSummary(true)
+            </div>
+        }
+        <div class="mb-3">
+            <label class="form-label">Nombre *</label>
+            <input asp-for="Name" class="form-control" required maxlength="200" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea asp-for="Description" class="form-control" rows="3" maxlength="1000"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
