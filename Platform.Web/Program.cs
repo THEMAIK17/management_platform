@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Platform.Application;
 using Platform.Infrastructure;
@@ -12,6 +13,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // ── Application & Infrastructure Services ────────────────────
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+
+// ── Authentication ───────────────────────────────────────────
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    });
 
 // ── MVC ───────────────────────────────────────────────────────
 builder.Services.AddControllersWithViews();
@@ -28,6 +38,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthentication(); // Added
 app.UseAuthorization();
 
 app.MapControllerRoute(
