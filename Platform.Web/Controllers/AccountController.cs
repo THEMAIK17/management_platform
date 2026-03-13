@@ -61,6 +61,35 @@ public class AccountController : Controller
         }
     }
 
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register(string email, string password, string confirmPassword)
+    {
+        try
+        {
+            if (password != confirmPassword)
+            {
+                ModelState.AddModelError(string.Empty, "Las contraseñas no coinciden.");
+                return View();
+            }
+
+            await _authService.RegisterAsync(email, password);
+            
+            TempData["Success"] = "Usuario registrado con éxito. Ya puedes iniciar sesión.";
+            return RedirectToAction("Login");
+        }
+        catch (DomainException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View();
+        }
+    }
+
     [HttpPost]
     public async Task<IActionResult> Logout()
     {
