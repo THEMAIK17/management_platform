@@ -12,6 +12,8 @@ public class UnitOfWork : IUnitOfWork
     public ITaskRepository Tasks { get; }
     public IUserRepository Users { get; }
 
+    // All repositories share the same DbContext so that a single SaveChangesAsync
+    // flushes every pending change in one atomic database transaction.
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;

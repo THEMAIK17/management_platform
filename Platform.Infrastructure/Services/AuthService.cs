@@ -26,6 +26,7 @@ public class AuthService : IAuthService
         if (await _uow.Users.EmailExistsAsync(email))
             throw new DomainException("El correo electrónico ya está registrado.");
 
+        // BCrypt automatically generates and embeds a salt — no plain-text password is stored.
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
         var user = User.Create(email, passwordHash);
 
@@ -37,6 +38,8 @@ public class AuthService : IAuthService
     {
         var user = await _uow.Users.GetByEmailAsync(email);
 
+        // Use a generic error message for both "not found" and "wrong password"
+        // to avoid leaking whether the email is registered.
         if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             throw new DomainException("Credenciales inválidas.");
 
@@ -56,7 +59,7 @@ public class AuthService : IAuthService
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // unique token ID
         };
 
         var token = new JwtSecurityToken(

@@ -1,74 +1,74 @@
 # Management Platform
 
-Plataforma de gestión de proyectos y tareas — Technical Assessment.
+Project and task management platform — Technical Assessment.
 
-Arquitectura: **Clean Architecture** con .NET 8, PostgreSQL, Entity Framework Core y JWT.
+Architecture: **Clean Architecture** with .NET 8, PostgreSQL, Entity Framework Core, and JWT.
 
 ---
 
-## Estructura del proyecto
+## Project Structure
 
 ```
 Management_Platform.sln
-├── Platform.Domain          # Entidades, interfaces, excepciones de negocio
-├── Platform.Application     # DTOs, servicios de aplicación, interfaces
-├── Platform.Infrastructure  # EF Core, repositorios, AuthService, migraciones
-├── Platform.Api             # API REST (ASP.NET Core + Swagger + JWT)
-├── Platform.Web             # Interfaz web (ASP.NET Core MVC + Razor)
-└── Platform.Tests           # Pruebas unitarias (xUnit)
+├── Platform.Domain          # Entities, interfaces, and domain exceptions
+├── Platform.Application     # DTOs, application services, and service interfaces
+├── Platform.Infrastructure  # EF Core, repositories, AuthService, and migrations
+├── Platform.Api             # REST API (ASP.NET Core + Swagger + JWT)
+├── Platform.Web             # Web interface (ASP.NET Core MVC + Razor Views)
+└── Platform.Tests           # Unit tests (xUnit)
 ```
 
 ---
 
-## Requisitos previos
+## Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [PostgreSQL 14+](https://www.postgresql.org/)
-- (Opcional) [pgAdmin](https://www.pgadmin.org/) para visualizar la base de datos
+- (Optional) [pgAdmin](https://www.pgadmin.org/) to inspect the database
 
 ---
 
-## Configuración de la base de datos
+## Database Setup
 
-1. Crea una base de datos en PostgreSQL:
+1. Create a database in PostgreSQL:
    ```sql
    CREATE DATABASE management_platform;
    ```
 
-2. Actualiza la cadena de conexión en los archivos `appsettings.json` de `Platform.Api` y `Platform.Web`:
+2. Update the connection string in `appsettings.json` for both `Platform.Api` and `Platform.Web`:
    ```json
    "ConnectionStrings": {
-     "DefaultConnection": "Host=localhost;Port=5432;Database=management_platform;Username=TU_USUARIO;Password=TU_PASSWORD"
+     "DefaultConnection": "Host=localhost;Port=5432;Database=management_platform;Username=YOUR_USER;Password=YOUR_PASSWORD"
    }
    ```
 
 ---
 
-## Migraciones
+## Migrations
 
-Ejecuta el siguiente comando desde la raíz del proyecto para aplicar las migraciones:
+Apply the existing migrations from the project root:
 
 ```bash
 dotnet ef database update --project Platform.Infrastructure --startup-project Platform.Api
 ```
 
-Para crear una nueva migración:
+To create a new migration:
 
 ```bash
-dotnet ef migrations add NombreMigracion --project Platform.Infrastructure --startup-project Platform.Api
+dotnet ef migrations add MigrationName --project Platform.Infrastructure --startup-project Platform.Api
 ```
 
 ---
 
-## Cómo ejecutar
+## Running the Application
 
-### API REST
+### REST API
 
 ```bash
 dotnet run --project Platform.Api
 ```
 
-Accede a Swagger en: `https://localhost:{puerto}/swagger`
+Navigate to Swagger: `https://localhost:{port}/swagger`
 
 ### Web MVC
 
@@ -76,44 +76,44 @@ Accede a Swagger en: `https://localhost:{puerto}/swagger`
 dotnet run --project Platform.Web
 ```
 
-Accede en: `https://localhost:{puerto}`
+Navigate to: `https://localhost:{port}`
 
 ---
 
-## Autenticación (JWT)
+## Authentication (JWT)
 
-La API usa JWT. Para obtener un token:
+The API is secured with JWT Bearer tokens. To authenticate:
 
-1. **Registrar un usuario** — `POST /api/auth/register`
+1. **Register a user** — `POST /api/auth/register`
    ```json
    { "email": "admin@test.com", "password": "Admin1234!" }
    ```
 
-2. **Iniciar sesión** — `POST /api/auth/login`
+2. **Login** — `POST /api/auth/login`
    ```json
    { "email": "admin@test.com", "password": "Admin1234!" }
    ```
-   La respuesta incluye el token JWT.
+   The response body contains the JWT access token.
 
-3. En Swagger, haz clic en **"Authorize"** e ingresa: `Bearer {tu_token}`
+3. In Swagger, click **"Authorize"** and enter: `Bearer {your_token}`
 
-### Credenciales de prueba
+### Test Credentials
 
 | Email | Password |
 |---|---|
 | `admin@test.com` | `Admin1234!` |
 
-> Debes registrar este usuario tú mismo la primera vez usando el endpoint `/api/auth/register`.
+> You must register this user first via the `/api/auth/register` endpoint.
 
 ---
 
-## Ejecutar pruebas unitarias
+## Running Unit Tests
 
 ```bash
 dotnet test Platform.Tests
 ```
 
-**Tests incluidos:**
+**Covered test cases:**
 - `ActivateProject_WithTasks_ShouldSucceed`
 - `ActivateProject_WithoutTasks_ShouldFail`
 - `CompleteProject_WithAllTasksCompleted_ShouldSucceed`
@@ -123,34 +123,34 @@ dotnet test Platform.Tests
 
 ---
 
-## Endpoints principales de la API
+## API Endpoints
 
-| Método | Ruta | Descripción | Auth |
+| Method | Route | Description | Auth |
 |---|---|---|---|
-| POST | `/api/auth/register` | Registrar usuario | ❌ |
-| POST | `/api/auth/login` | Iniciar sesión | ❌ |
-| GET | `/api/projects/search` | Listar proyectos (paginado) | ✅ |
-| GET | `/api/projects/summary` | Resumen global | ✅ |
-| POST | `/api/projects` | Crear proyecto | ✅ |
-| PUT | `/api/projects/{id}` | Actualizar proyecto | ✅ |
-| DELETE | `/api/projects/{id}` | Eliminar proyecto | ✅ |
-| PATCH | `/api/projects/{id}/activate` | Activar proyecto | ✅ |
-| PATCH | `/api/projects/{id}/complete` | Completar proyecto | ✅ |
-| GET | `/api/projects/{id}/tasks` | Listar tareas del proyecto | ✅ |
-| POST | `/api/tasks/{projectId}` | Crear tarea | ✅ |
-| PUT | `/api/tasks/{id}` | Actualizar tarea | ✅ |
-| DELETE | `/api/tasks/{id}` | Eliminar tarea | ✅ |
-| PATCH | `/api/tasks/{id}/complete` | Completar tarea | ✅ |
-| PATCH | `/api/tasks/{id}/reorder` | Reordenar tarea | ✅ |
+| POST | `/api/auth/register` | Register a new user | No |
+| POST | `/api/auth/login` | Login and receive JWT token | No |
+| GET | `/api/projects/search` | List projects (paginated, filterable) | Required |
+| GET | `/api/projects/summary` | Global project and task counts | Required |
+| POST | `/api/projects` | Create a project | Required |
+| PUT | `/api/projects/{id}` | Update a project | Required |
+| DELETE | `/api/projects/{id}` | Delete a project | Required |
+| PATCH | `/api/projects/{id}/activate` | Activate a project | Required |
+| PATCH | `/api/projects/{id}/complete` | Complete a project | Required |
+| GET | `/api/projects/{id}/tasks` | List tasks for a project | Required |
+| POST | `/api/tasks/{projectId}` | Create a task | Required |
+| PUT | `/api/tasks/{id}` | Update a task | Required |
+| DELETE | `/api/tasks/{id}` | Delete a task | Required |
+| PATCH | `/api/tasks/{id}/complete` | Mark a task as completed | Required |
+| PATCH | `/api/tasks/{id}/reorder` | Change the order of a task | Required |
 
 ---
 
-## Tecnologías utilizadas
+## Technologies
 
 - **Backend**: ASP.NET Core 8
 - **ORM**: Entity Framework Core 8
-- **Base de datos**: PostgreSQL (via Npgsql)
-- **Autenticación**: JWT (System.IdentityModel.Tokens.Jwt)
-- **Hashing**: BCrypt.Net-Next
-- **Documentación API**: Swagger / Swashbuckle
-- **Pruebas**: xUnit + Moq
+- **Database**: PostgreSQL (via Npgsql)
+- **Authentication**: JWT (System.IdentityModel.Tokens.Jwt)
+- **Password Hashing**: BCrypt.Net-Next
+- **API Documentation**: Swagger / Swashbuckle
+- **Testing**: xUnit + Moq

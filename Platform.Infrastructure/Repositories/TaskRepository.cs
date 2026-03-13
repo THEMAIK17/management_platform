@@ -51,6 +51,7 @@ public class TaskRepository : ITaskRepository
             .Where(t => t.ProjectId == projectId)
             .ToListAsync();
 
+        // Returns 0 when no tasks exist, allowing callers to start at order 1.
         return tasks.Any() ? tasks.Max(t => t.Order) : 0;
     }
 
@@ -59,6 +60,7 @@ public class TaskRepository : ITaskRepository
         var query = _context.Tasks
             .Where(t => t.ProjectId == projectId && t.Order == order);
 
+        // Exclude the task being updated so it doesn't conflict with its own current order.
         if (excludeTaskId.HasValue)
             query = query.Where(t => t.Id != excludeTaskId.Value);
 
@@ -67,6 +69,7 @@ public class TaskRepository : ITaskRepository
 
     public async Task<IEnumerable<TaskItem>> GetTasksToReorderAsync(Guid projectId, int fromOrder, int toOrder)
     {
+        // Fetch all tasks in the affected range to shift them up or down during reorder.
         var min = Math.Min(fromOrder, toOrder);
         var max = Math.Max(fromOrder, toOrder);
 

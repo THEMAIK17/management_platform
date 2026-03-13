@@ -66,6 +66,7 @@ public class ProjectService : IProjectService
         var project = await _uow.Projects.GetByIdAsync(id);
         if (project == null) throw new DomainException("Proyecto no encontrado.");
 
+        // Pass task count so the domain entity can enforce its own invariant.
         var tasks = await _uow.Tasks.GetByProjectIdAsync(id);
         project.Activate(tasks.Count());
 
@@ -90,13 +91,10 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectSummaryDto> GetSummaryAsync()
     {
-        // For a more performant summary, we'd add a specialized method to IProjectRepository
-        // but for now we can use the existing paged method with page 1, size max
+        // Loads all projects in memory. Acceptable for a summary endpoint with moderate data volume.
         var (allProjects, totalCount) = await _uow.Projects.GetPagedAsync(1, int.MaxValue, null);
         var projectsList = allProjects.ToList();
 
-        var (allTasks, totalTasksCount) = (Enumerable.Empty<TaskItem>(), 0); // We don't have GetPaged for tasks yet
-        // Let's just sum up from the projects loaded
         var totalTasks = projectsList.Sum(p => p.Tasks.Count);
 
         return new ProjectSummaryDto(

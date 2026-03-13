@@ -3,20 +3,20 @@ using Platform.Domain.Exceptions;
 
 namespace Platform.Domain.Entities;
 
-
 public class TaskItem
 {
     public Guid Id { get; private set; }
     public Guid ProjectId { get; private set; }
     public string Title { get; private set; } = string.Empty;
     public Priority Priority { get; private set; }
+
+    // Two tasks within the same project cannot share the same order value.
     public int Order { get; private set; }
     public bool IsCompleted { get; private set; }
 
-    // Navigation property for EF Core
-    public Project Project { get; private set; } = null!;
+    public Project Project { get; private set; } = null!;  // Navigation property for EF Core
 
-    // Required by EF Core
+    // Required by EF Core for materialisation — not intended for application use.
     private TaskItem() { }
 
     public static TaskItem Create(Guid projectId, string title, Priority priority, int order)

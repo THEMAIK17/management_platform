@@ -31,6 +31,7 @@ public class ProjectRepository : IProjectRepository
             query = query.Where(p => p.Status.ToString() == statusFilter);
         }
 
+        // Count total before applying pagination, so the caller can compute page metadata.
         var totalCount = await query.CountAsync();
 
         var items = await query

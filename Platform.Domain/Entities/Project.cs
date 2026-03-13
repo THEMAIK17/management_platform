@@ -2,6 +2,7 @@ using Platform.Domain.Enums;
 using Platform.Domain.Exceptions;
 
 namespace Platform.Domain.Entities;
+
 public class Project
 {
     public Guid Id { get; private set; }
@@ -9,10 +10,10 @@ public class Project
     public string Description { get; private set; } = string.Empty;
     public ProjectStatus Status { get; private set; }
 
-    // Navigation property — private set prevents reassignment from outside
+    // Private setter prevents external reassignment; EF Core can still populate the collection.
     public ICollection<TaskItem> Tasks { get; private set; } = new List<TaskItem>();
 
-    // Required by EF Core
+    // Required by EF Core for materialisation — not intended for application use.
     private Project() { }
 
     public static Project Create(string name, string description)
@@ -38,9 +39,7 @@ public class Project
         Description = description?.Trim() ?? string.Empty;
     }
 
-    /// <summary>
-    /// Business Rule: A project can only be activated if it has at least one task.
-    /// </summary>
+    // Business Rule: a project must have at least one task to be activated.
     public void Activate(int taskCount)
     {
         if (taskCount == 0)
@@ -52,9 +51,7 @@ public class Project
         Status = ProjectStatus.Active;
     }
 
-    /// <summary>
-    /// Business Rule: A project can only be completed if ALL its tasks are completed.
-    /// </summary>
+    // Business Rule: all tasks must be completed before the project can be closed.
     public void Complete(int totalTasks, int completedTasks)
     {
         if (Status != ProjectStatus.Active)
