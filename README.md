@@ -151,6 +151,21 @@ dotnet test Platform.Tests
 
 ---
 
+## System Screenshots
+
+*(Below are placeholders to insert system screenshots once the application is running)*
+
+### Login Page
+> ![Captura_Login] - Secure credentials entry.
+
+### Projects Dashboard
+> ![Captura_Dashboard] - General list with statuses (Draft, Active, Completed).
+
+### Task Management
+> ![Captura_Tareas] - Creation form and task list with hierarchical order.
+
+---
+
 ## Technologies
 
 - **Backend**: ASP.NET Core 8
