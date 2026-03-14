@@ -29,13 +29,13 @@
 *(A continuación se presentan los espacios para insertar las capturas de pantalla una vez el sistema esté en ejecución)*
 
 ### 4.1 Pantalla de Login
-> ![Captura_Login] - Introducción de credenciales seguras.
+> ![Pantalla de Login](screenshots/login.png) - Introducción de credenciales seguras.
 
 ### 4.2 Tablero de Proyectos
-> ![Captura_Dashboard] - Listado general con estados (Draft, Active, Completed).
+> ![Tablero de Proyectos](screenshots/dashboard.png) - Listado general con estados (Draft, Active, Completed).
 
 ### 4.3 Gestión de Tareas
-> ![Captura_Tareas] - Formulario de creación y listado de tareas con orden jerárquico.
+> ![Gestión de Tareas](screenshots/task-list.png) - Formulario de creación y listado de tareas con orden jerárquico.
 
 ---
 *Nota: Para generar los reportes de usuario, el sistema utiliza vistas Razor dinámicas.*
