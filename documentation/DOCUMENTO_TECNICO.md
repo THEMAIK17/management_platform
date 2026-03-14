@@ -17,6 +17,20 @@ El sistema está desarrollado bajo el patrón **Clean Architecture**, dividiendo
 
 ## 3. Flujo del Sistema
 El flujo de información sigue un camino unidireccional para peticiones y respuestas:
+
+```mermaid
+graph LR
+    A[Usuario / Navegador] -->|Petición HTTP| B[Controlador Web/API]
+    B -->|Llamada DTO| C[Servicios Aplicación]
+    C -->|Valida Reglas| D[Entidades Dominio]
+    C -->|Persiste Datos| E[Repositorios / EF Core]
+    E -->|SQL| F[Base de Datos PostgreSQL]
+    F -->|Datos| E
+    E -->|Entidades| C
+    C -->|Mapeo DTO| B
+    B -->|Respuesta| A
+```
+
 1.  **Entrada**: El usuario realiza una acción en `Platform.Web` (ej: Crear Tarea).
 2.  **Controlador**: El `TaskController` recibe la petición y valida el estado de autenticación.
 3.  **Servicio**: Se llama al `TaskService` en la capa de Aplicación.
