@@ -35,7 +35,7 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectDto> CreateAsync(CreateProjectDto dto)
     {
-        var project = Project.Create(dto.Name, dto.Description);
+        var project = Project.Create(dto.Name, dto.Description, dto.UserId);
         await _uow.Projects.AddAsync(project);
         await _uow.SaveChangesAsync();
 
@@ -109,11 +109,14 @@ public class ProjectService : IProjectService
     {
         return new ProjectDto(
             p.Id,
+            p.UserId,
             p.Name,
             p.Description,
             p.Status,
             p.Tasks.Count,
-            p.Tasks.Count(t => t.IsCompleted)
+            p.Tasks.Count(t => t.IsCompleted),
+            p.CreatedAt,
+            p.UpdatedAt
         );
     }
 }

@@ -4,16 +4,20 @@ namespace Platform.Application.DTOs;
 
 public record ProjectDto(
     Guid Id,
+    Guid UserId,
     string Name,
     string Description,
     ProjectStatus Status,
     int TaskCount,
-    int CompletedTaskCount
+    int CompletedTaskCount,
+    DateTime CreatedAt,
+    DateTime? UpdatedAt
 );
 
 public record CreateProjectDto(
     string Name,
-    string Description
+    string Description,
+    Guid UserId
 );
 
 public record UpdateProjectDto(

@@ -15,7 +15,7 @@ public class ProjectTests
     public void ActivateProject_WithTasks_ShouldSucceed()
     {
         // Arrange
-        var project = Project.Create("Test Project", "Description");
+        var project = Project.Create("Test Project", "Description", Guid.NewGuid());
 
         // Act – project has 1 task
         project.Activate(taskCount: 1);
@@ -28,7 +28,7 @@ public class ProjectTests
     public void ActivateProject_WithoutTasks_ShouldFail()
     {
         // Arrange
-        var project = Project.Create("Test Project", "Description");
+        var project = Project.Create("Test Project", "Description", Guid.NewGuid());
 
         // Act & Assert – no tasks → must throw
         Assert.Throws<DomainException>(() => project.Activate(taskCount: 0));
@@ -43,7 +43,7 @@ public class ProjectTests
     public void CompleteProject_WithAllTasksCompleted_ShouldSucceed()
     {
         // Arrange
-        var project = Project.Create("Test Project", "Description");
+        var project = Project.Create("Test Project", "Description", Guid.NewGuid());
         project.Activate(taskCount: 2);
 
         // Act – all 2 tasks completed
@@ -57,7 +57,7 @@ public class ProjectTests
     public void CompleteProject_WithPendingTasks_ShouldFail()
     {
         // Arrange
-        var project = Project.Create("Test Project", "Description");
+        var project = Project.Create("Test Project", "Description", Guid.NewGuid());
         project.Activate(taskCount: 3);
 
         // Act & Assert – 2 out of 3 done → must throw
@@ -92,7 +92,7 @@ public class ProjectTests
         // that there is no restriction preventing deletion (no business rule blocks it).
 
         // Arrange & Act
-        var project = Project.Create("To Delete", "Temporary project");
+        var project = Project.Create("To Delete", "Temporary project", Guid.NewGuid());
 
         // Assert – entity created successfully, no rule prevents deletion
         Assert.NotEqual(Guid.Empty, project.Id);

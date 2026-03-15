@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Platform.Application.DTOs;
@@ -58,7 +59,9 @@ public class ProjectsController : ControllerBase
     {
         try
         {
-            var project = await _projectService.CreateAsync(dto);
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var createDto = dto with { UserId = userId };
+            var project = await _projectService.CreateAsync(createDto);
             return CreatedAtAction(nameof(GetTasks), new { id = project.Id }, project);
         }
         catch (DomainException ex)

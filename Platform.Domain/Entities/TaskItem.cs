@@ -13,6 +13,8 @@ public class TaskItem
     // Two tasks within the same project cannot share the same order value.
     public int Order { get; private set; }
     public bool IsCompleted { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; private set; }
 
     public Project Project { get; private set; } = null!;  // Navigation property for EF Core
 
@@ -46,6 +48,7 @@ public class TaskItem
         Title = title.Trim();
         Priority = priority;
         IsCompleted = isCompleted;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void SetCompletionStatus(bool isCompleted)

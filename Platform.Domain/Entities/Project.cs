@@ -9,6 +9,12 @@ public class Project
     public string Name { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
     public ProjectStatus Status { get; private set; }
+    public Guid UserId { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; private set; }
+
+    // Relationship with User
+    public User User { get; private set; } = null!;
 
     // Private setter prevents external reassignment; EF Core can still populate the collection.
     public ICollection<TaskItem> Tasks { get; private set; } = new List<TaskItem>();
@@ -16,7 +22,7 @@ public class Project
     // Required by EF Core for materialisation — not intended for application use.
     private Project() { }
 
-    public static Project Create(string name, string description)
+    public static Project Create(string name, string description, Guid userId)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException("El nombre del proyecto es obligatorio.");
@@ -24,9 +30,11 @@ public class Project
         return new Project
         {
             Id = Guid.NewGuid(),
+            UserId = userId,
             Name = name.Trim(),
             Description = description?.Trim() ?? string.Empty,
-            Status = ProjectStatus.Draft
+            Status = ProjectStatus.Draft,
+            CreatedAt = DateTime.UtcNow
         };
     }
 
@@ -37,6 +45,7 @@ public class Project
 
         Name = name.Trim();
         Description = description?.Trim() ?? string.Empty;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     // Business Rule: a project must have at least one task to be activated.
