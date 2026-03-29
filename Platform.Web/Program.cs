@@ -28,6 +28,19 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// ── Professional Startup Message ──────────────────────────────
+var displayUrl = app.Configuration["DISPLAY_URL"] ?? "http://localhost:5229";
+Console.WriteLine(" \n" +
+                  "  ╔══════════════════════════════════════════════════════════════╗\n" +
+                  "  ║                                                              ║\n" +
+                  "  ║   MANAGEMENT PLATFORM - WEB INTERFACE                        ║\n" +
+                  "  ║   The service is starting up...                              ║\n" +
+                  "  ║                                                              ║\n" +
+                  "  ║   Access the platform at:                                    ║\n" +
+                  $"  ║   {displayUrl,-59}║\n" +
+                  "  ║                                                              ║\n" +
+                  "  ╚══════════════════════════════════════════════════════════════╝\n");
+
 // ── Middleware ────────────────────────────────────────────────
 if (!app.Environment.IsDevelopment())
 {

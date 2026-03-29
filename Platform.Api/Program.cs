@@ -63,6 +63,37 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+// ── Automatic Migrations ──────────────────────────────────────
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        if (context.Database.IsRelational())
+        {
+            context.Database.Migrate();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"  [!] Error applying migrations: {ex.Message}");
+    }
+}
+
+// ── Professional Startup Message ──────────────────────────────
+var displayUrl = app.Configuration["DISPLAY_URL"] ?? "http://localhost:5294/swagger";
+Console.WriteLine(" \n" +
+                  "  ╔══════════════════════════════════════════════════════════════╗\n" +
+                  "  ║                                                              ║\n" +
+                  "  ║   MANAGEMENT PLATFORM - REST API                             ║\n" +
+                  "  ║   The service is starting up...                              ║\n" +
+                  "  ║                                                              ║\n" +
+                  "  ║   Access Swagger UI at:                                      ║\n" +
+                  $"  ║   {displayUrl,-59}║\n" +
+                  "  ║                                                              ║\n" +
+                  "  ╚══════════════════════════════════════════════════════════════╝\n");
+
 // ── Middleware ────────────────────────────────────────────────
 if (app.Environment.IsDevelopment())
 {
