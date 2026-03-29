@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: platform_db
+    restart: always
+    environment:
+      POSTGRES_DB: management_platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d management_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Platform.Api/Dockerfile
+    container_name: platform_api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Database=management_platform;Username=postgres;Password=postgres
+      - Jwt__Key=c2VjcmV0X2tleV9mb3JfbWFuYWdlbWVudF9wbGF0Zm9ybV8yMDI0
+      - Jwt__Issuer=Platform.Api
+      - Jwt__Audience=Platform.Client
+      - DISPLAY_URL=http://localhost:5294/swagger
+    ports:
+      - "5294:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: Platform.Web/Dockerfile
+    container_name: platform_web
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Database=management_platform;Username=postgres;Password=postgres
+      - Jwt__Key=c2VjcmV0X2tleV9mb3JfbWFuYWdlbWVudF9wbGF0Zm9ybV8yMDI0
+      - Jwt__Issuer=Platform.Api
+      - Jwt__Audience=Platform.Client
+      - DISPLAY_URL=http://localhost:5229
+    ports:
+      - "5229:8080"
+    depends_on:
+      - db
+      - api
+
+volumes:
+  postgres_data:

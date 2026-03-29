@@ -20,22 +20,40 @@ Management_Platform.sln
 
 ---
 
-## Prerequisites
+## Getting Started (Docker - Recommended)
+
+If you have Docker installed, you can run the entire stack (API, Web, and Database) with a single command. **This is the fastest way to get the project running on a new machine.**
+
+1. **Clone the repository.**
+2. **Run the services:**
+   ```bash
+   docker compose up -d --build
+   ```
+   *Note: The application will automatically apply database migrations on startup.*
+
+The services will be available at:
+- **API (Swagger):** [http://localhost:5294/swagger](http://localhost:5294/swagger)
+- **Web MVC:** [http://localhost:5229](http://localhost:5229)
+- **Postgres:** `localhost:5432`
+
+---
+
+## Manual Setup (Without Docker)
+
+### Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [PostgreSQL 14+](https://www.postgresql.org/)
 - (Optional) [pgAdmin](https://www.pgadmin.org/) to inspect the database
 
----
-
-## Database Setup
+### Database Setup
 
 1. Create a database in PostgreSQL:
    ```sql
    CREATE DATABASE management_platform;
    ```
 
-2. Configure the connection string using **.NET User Secrets** (recommended for security) for both `Platform.Api` and `Platform.Web`:
+2. Configure the connection string using **.NET User Secrets** for both `Platform.Api` and `Platform.Web`:
 
    From the project root, run:
    ```bash
@@ -46,11 +64,7 @@ Management_Platform.sln
    dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=management_platform;Username=YOUR_USER;Password=YOUR_PASSWORD" --project Platform.Web
    ```
 
-   *Note: Using User Secrets prevents sensitive credentials from being committed to the repository.*
-
----
-
-## Migrations
+### Migrations
 
 Apply the existing migrations from the project root:
 
@@ -58,30 +72,18 @@ Apply the existing migrations from the project root:
 dotnet ef database update --project Platform.Infrastructure --startup-project Platform.Api
 ```
 
-To create a new migration:
+### Running the Application
 
-```bash
-dotnet ef migrations add MigrationName --project Platform.Infrastructure --startup-project Platform.Api
-```
-
----
-
-## Running the Application
-
-### REST API
-
+**REST API:**
 ```bash
 dotnet run --project Platform.Api
 ```
-
 Navigate to Swagger: `https://localhost:{port}/swagger`
 
-### Web MVC
-
+**Web MVC:**
 ```bash
 dotnet run --project Platform.Web
 ```
-
 Navigate to: `https://localhost:{port}`
 
 ---
@@ -170,6 +172,7 @@ dotnet test Platform.Tests
 
 - **Backend**: ASP.NET Core 8
 - **ORM**: Entity Framework Core 8
+- **Containerization**: Docker & Docker Compose
 - **Database**: PostgreSQL (via Npgsql)
 - **Authentication**: JWT (System.IdentityModel.Tokens.Jwt)
 - **Password Hashing**: BCrypt.Net-Next
