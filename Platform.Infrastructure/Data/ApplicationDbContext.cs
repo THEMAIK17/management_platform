@@ -33,6 +33,17 @@ public class ApplicationDbContext : DbContext
             entity.Property(p => p.Status)
                 .IsRequired()
                 .HasConversion<string>(); // Stores "Draft", "Active", "Completed" as strings
+
+            entity.Property(p => p.CreatedAt)
+                .IsRequired();
+
+            entity.Property(p => p.UpdatedAt);
+
+            // Relationship: Project belongs to User
+            entity.HasOne(p => p.User)
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         // TaskItem configuration
